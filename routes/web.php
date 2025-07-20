@@ -66,8 +66,7 @@ Route::post('/makePaymentAll', [BookingController::class, 'makePaymentAll'])->na
 
 Route::get('forgotpassword', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('forgotpassword.request');
 Route::post('forgotpassword/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forgotpassword.email');
-Route::get('forgotpassword/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('forgotpassword.reset');
-Route::post('forgotpassword/reset', [ResetPasswordController::class, 'reset'])->name('forgotpassword.update');
+
 
 Route::post('/contact-submit', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/contact-messages', [ContactController::class, 'messages'])->name('contact.messages')->middleware('auth');
