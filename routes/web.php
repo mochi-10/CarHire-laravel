@@ -64,10 +64,10 @@ Route::post('/deleteBooking/{booking}', [BookingController::class, 'destroy'])->
 Route::post('/makePaymentAll', [BookingController::class, 'makePaymentAll'])->name('makePaymentAll');
 
 
-Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('forgotpassword', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('forgotpassword.request');
+Route::post('forgotpassword/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forgotpassword.email');
+Route::get('forgotpassword/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('forgotpassword.reset');
+Route::post('forgotpassword/reset', [ResetPasswordController::class, 'reset'])->name('forgotpassword.update');
 
 Route::post('/contact-submit', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/contact-messages', [ContactController::class, 'messages'])->name('contact.messages')->middleware('auth');
