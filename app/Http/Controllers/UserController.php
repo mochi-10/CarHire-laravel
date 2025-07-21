@@ -134,4 +134,21 @@ class UserController extends Controller
     public function customerRegistration(){
         return view('users.customerRegistration');
     }
+
+    public function forgotPasswordForm()
+    {
+        return view('users.forgot');
+    }
+
+    public function forgotPasswordEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+
+        // Logic to send reset password link
+        // This is a placeholder, implement your email sending logic here
+        alert()->success('Success', 'Reset password link sent to your email.');
+        return redirect()->back();
+    }
+
+  
 }

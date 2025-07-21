@@ -26,7 +26,7 @@
         </div>
         <div class="login-box-body">
             <p class="login-box-msg">Forgot Password</p>
-            <form action="{{ route('password.email') }}" method="POST">
+            <form action="{{ route('forgotPasswordEmail') }}" method="POST">
                 @csrf
                 <div class="form-group has-feedback">
                     <input type="email" class="form-control" name="email" placeholder="Enter your email" required>

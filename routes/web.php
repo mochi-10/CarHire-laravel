@@ -7,7 +7,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarModelController;
 use App\Http\Controllers\MyProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\ForgotPasswordController;
+
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ContactController;
 
@@ -63,9 +63,9 @@ Route::get('/downloadReceipt/{booking}', [BookingController::class, 'downloadRec
 Route::post('/deleteBooking/{booking}', [BookingController::class, 'destroy'])->name('deleteBooking');
 Route::post('/makePaymentAll', [BookingController::class, 'makePaymentAll'])->name('makePaymentAll');
 
+Route::post('forgotPasswordEmail', [UserController::class, 'forgotPasswordEmail'])->name('forgotPasswordEmail');
+Route::get('forgotPassword', [UserController::class, 'forgotPasswordForm'])->name('forgotPasswordForm');
 
-Route::get('forgotpassword', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('forgotpassword.request');
-Route::post('forgotpassword/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forgotpassword.email');
 
 
 Route::post('/contact-submit', [ContactController::class, 'submit'])->name('contact.submit');
