@@ -9,21 +9,24 @@ use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use phpoffice\PhpSpreadsheet\Spreadsheet;
 use phpoffice\PhpSpreadsheet\writer\Xlsx;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+
 
 
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    
     //
     public function index()
     {
         // Logic to retrieve and display users
         $users = User::paginate(5);
-        $total_users = $users->count();
+        $total_users = User::count();
         return view('users.index', compact(['users', 'total_users']));
     }
 
@@ -93,7 +96,7 @@ class UserController extends Controller
     public function uploadFile(Request $request)
     {
         $file = $request->file('file');
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getPathname());
+        $spreadsheet = IOFactory::load($file->getPathname());
         $sheet = $spreadsheet->getActiveSheet();
         $rows = $sheet->toArray();
 
@@ -135,20 +138,34 @@ class UserController extends Controller
         return view('users.customerRegistration');
     }
 
-    public function forgotPasswordForm()
+    public function forgotPassword()
     {
         return view('users.forgot');
     }
 
-    public function forgotPasswordEmail(Request $request)
-    {
-        $request->validate(['email' => 'required|email|exists:users,email']);
+     public function sendResetPassword(Request $request){
+        $validated=$request->validate([
+            'email'=> 'required|email|exists:users,email',
+        ]);
 
-        // Logic to send reset password link
-        // This is a placeholder, implement your email sending logic here
-        alert()->success('Success', 'Reset password link sent to your email.');
-        return redirect()->back();
+        $email=$request->email;
+        $password=12345678;
+        $data=[
+            'email'=>$email,
+            'password'=>$password,
+        ];
+    
+        User::where('email', $email)->update([
+            'password' => Hash::make($password)
+        ]);
+        
+        $send=Mail::to($email)->send(new ResetPasswordMail($data));
+        if($send){
+            return redirect()->back()->with('success', 'Reset password link sent to your email.');
+        }else{
+            return redirect()->back()->with('error', 'Failed to send reset password link.');
+        }
     }
 
-  
+
 }

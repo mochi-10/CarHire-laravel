@@ -15,7 +15,9 @@ class Booking extends Model
         'total_days',
         'total_km',
         'amount_to_pay',
+        'booking-status',
         'payment_status',
+        'return_status',
     ];
 
     public function car()

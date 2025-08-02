@@ -4,12 +4,12 @@
 <!-- Main content -->
 <section class="content">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="box">
         <div class="box-header">
           <h3 class="box-title text-primary" style="font-weight:bold;">My Profile</h3>
         </div>
-        <div class="box-body">
+        <div class="container-fluid py-1">
           <table class="table table-bordered">
             <tr>
               <th>First Name</th>
@@ -34,9 +34,9 @@
           </table>
         </div>
       </div>
-
-
-      <div class="box mt-4">
+    </div>
+    <div class="col-md-4">
+      <div class="box mt-4 mt-md-0">
         <div class="box-header">
           <h3 class="box-title text-primary" style="font-weight:bold;">Update Password</h3>
         </div>
@@ -68,18 +68,19 @@
                   <strong>{{ $message }}</strong>
                 </span>
               @enderror
-             <div class="form-group mb-3">
+            </div>
+            <div class="form-group mb-3">
               <label for="email">Email</label>
               <input id="email" type="email"
                      class="form-control @error('email') is-invalid @enderror"
-                     name="email" required>
+                     name="email" value="{{ old('email', $user->email) }}" required>
               @error('email')
                 <span class="invalid-feedback d-block" role="alert">
                   <strong>{{ $message }}</strong>
                 </span>
               @enderror
             </div>
-             <div class="form-group mb-3">
+            <div class="form-group mb-3">
               <label for="address">Address</label>
               <input id="address" type="text"
                      class="form-control @error('address') is-invalid @enderror"
@@ -90,12 +91,11 @@
                 </span>
               @enderror
             </div>
-            
             <div class="form-group mb-3">
               <label for="current_password">Current Password</label>
               <input id="current_password" type="password"
                      class="form-control @error('current_password') is-invalid @enderror"
-                     name="current_password" required>
+                     name="current_password" placeholder="Enter Current Password..." required>
               @error('current_password')
                 <span class="invalid-feedback d-block" role="alert">
                   <strong>{{ $message }}</strong>
@@ -106,7 +106,7 @@
               <label for="password">New Password</label>
               <input id="password" type="password"
                      class="form-control @error('password') is-invalid @enderror"
-                     name="password" autocomplete="new-password" required>
+                     name="password" autocomplete="new-password" placeholder="Enter New Password..." required>
               @error('password')
                 <span class="invalid-feedback d-block" role="alert">
                   <strong>{{ $message }}</strong>
@@ -117,7 +117,7 @@
               <label for="password_confirmation">Confirm New Password</label>
               <input id="password_confirmation" type="password"
                      class="form-control"
-                     name="password_confirmation" autocomplete="new-password" required>
+                     name="password_confirmation" autocomplete="new-password" placeholder="Confirm New Password..." required>
             </div>
             <button type="submit" class="btn btn-primary">Update Password</button>
           </form>

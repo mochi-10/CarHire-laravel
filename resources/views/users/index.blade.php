@@ -7,7 +7,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title text-primary" style="font-weight:bold;">{{ $total_users ?? 0}} : Administrators</h3>
+              <h3 class="box-title text-primary" style="font-weight:bold;">{{ $total_users ?? 0}} : Users List</h3>
               <button class="btn btn-primary btn-sm" style="float: right;" data-toggle="modal" data-target="#uploadFileModal">
                 <i class="fa fa-upload"></i> Upload
               </button>
@@ -19,7 +19,7 @@
               </button> -->
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body table-responsive">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -35,7 +35,7 @@
                 </thead>
               <tbody>
                 @foreach($users as $key=>$user)
-                <tr>
+                <tr>                 
                   <td>{{($users->currentPage() - 1) * $users->perPage() + $key + 1 }}</td>
                   <td>{{ $user->firstname }} {{ $user->lastname }}</td>
                   <td>{{ $user->phonenumber }}</td>

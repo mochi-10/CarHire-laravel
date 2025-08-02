@@ -50,14 +50,15 @@
     <div class="row align-items-center">
       <div class="col-lg-7 mb-4 mb-md-0">
         <h2 class="mb-0 text-white">What are you waiting for?</h2>
-        <p class="mb-0 opa-7">Click "Rent a car now" to rent your dream car.</p>
+        <p class="mb-0 opa-7">Hire a car now and enjoy your trip!!</p>
       </div>
-      <div class="col-lg-5 text-md-right">
-        <a href="#" class="btn btn-primary btn-white">Rent a car now</a>
+      <div class="col-lg-4 ml-auto">
+        <p class="mb-0"><a href="{{ route('carListings') }}" class="btn btn-white btn-outline-white">Available Cars</a></p>
       </div>
     </div>
   </div>
-</div>
+
+
 
 <!-- <div class="site-section">
   <div class="container">
@@ -125,58 +126,7 @@
   </div>
 </div> -->
 
-<div class="site-section bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-7">
-        <h2 class="section-heading"><strong>Car Listings</strong></h2>
-        <p class="mb-5">Browse our available cars below.</p>
-      </div>
-    </div>
-    <div class="row">
-      @foreach($cars as $car)
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="listing d-block align-items-stretch">
-          <div class="listing-img h-100 mr-4">
-            @if($car->image)
-              <img src="{{ asset('images/' . $car->image) }}" alt="Image" class="img-fluid">
-            @else
-              <img src="{{ asset('images/default-car.png') }}" alt="No Image" class="img-fluid">
-            @endif
-          </div>
-          <div class="listing-contents h-100">
-            <h3>{{ $car->make }} {{ $car->carModel->name ?? $car->model }}</h3>
-            <div class="rent-price">
-              <strong>Ksh {{ number_format($car->rate_per_day) }}</strong><span class="mx-1">/</span>day |
-              <strong>Ksh {{ number_format($car->rate_per_km) }}</strong><span class="mx-1">/</span>Km
-            </div>
-            <div class="d-block d-md-flex mb-3 border-bottom pb-3">
-              <div class="listing-feature pr-4">
-                <span class="caption">Year:</span>
-                <span class="number">{{ $car->year }}</span>
-              </div>
-              <div class="listing-feature pr-4">
-                <span class="caption">Color:</span>
-                <span class="number">{{ $car->color }}</span>
-              </div>
-              <div class="listing-feature pr-4">
-                <span class="caption">Reg:</span>
-                <span class="number">{{ $car->registration_number }}</span>
-              </div>
-            </div>
-            <div>
-              <p>
-                <a href="{{ route('carDetailsPerDay', ['car_id' => $car->id, ]) }}" class="btn btn-primary btn-sm mr-2">Rent(Day)</a>
-                <a href="{{ route('carDetailsPerKm', ['car_id' => $car->id, ]) }}" class="btn btn-primary btn-sm">Rent(Km)</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      @endforeach
-    </div>
-  </div>
-</div>
+
 
 <!-- <div class="site-section">
   <div class="container">
@@ -318,5 +268,61 @@
   </div>
 </div> -->
 
+<div class="site-section bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <h2 class="section-heading"><strong>Our Gallery</strong></h2>
+        <p class="mb-5">Explore our complete collection of vehicles.</p>
+      </div>
+    </div>
+    <div class="row">
+      @foreach($allCars as $car)
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="listing d-block align-items-stretch">
+          <div class="listing-img h-100 mr-4">
+            @if($car->image)
+              <img src="{{ asset('images/' . $car->image) }}" alt="Image" class="img-fluid">
+            @else
+              <img src="{{ asset('images/default-car.png') }}" alt="No Image" class="img-fluid">
+            @endif
+          </div>
+          <div class="listing-contents h-100">
+            <h3>{{ $car->make }} {{ $car->carModel->name ?? $car->model }}</h3>
+            <div class="rent-price">
+              <strong>Ksh {{ number_format($car->rate_per_day) }}</strong><span class="mx-1">/</span>day |
+              <strong>Ksh {{ number_format($car->rate_per_km) }}</strong><span class="mx-1">/</span>Km
+            </div>
+            <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+              <div class="listing-feature pr-4">
+                <span class="caption">Year:</span>
+                <span class="number">{{ $car->year }}</span>
+              </div>
+              <div class="listing-feature pr-4">
+                <span class="caption">Color:</span>
+                <span class="number">{{ $car->color }}</span>
+              </div>
+              <div class="listing-feature pr-4">
+                <span class="caption">Reg:</span>
+                <span class="number">{{ $car->registration_number }}</span>
+              </div>
+            </div>
+            <div>
+              @php
+                $isBooked = \App\Models\Booking::where('car_id', $car->id)->where('booking_status', 'active')->exists();
+              @endphp
+              @if($isBooked)
+                <span class="badge badge-warning">Currently Booked</span>
+              @else
+                <span class="badge badge-success">Not Booked</span>
+              @endif
+            </div>
+          </div>
+        </div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</div>
 
 @endsection

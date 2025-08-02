@@ -7,7 +7,7 @@
       <div class="col-lg-5">
         <div class="intro">
           <h1><strong>My Bookings</strong></h1>
-          <div class="custom-breadcrumbs"><a href="{{route('home')}}">Home</a> <span class="mx-2">/</span> <strong>My Bookings</strong></div>
+          <div class="custom-breadcrumbs"><a href="{{route('welcome')}}">Home</a> <span class="mx-2">/</span> <strong>My Bookings</strong></div>
         </div>
       </div>
     </div>
@@ -15,7 +15,7 @@
       <div class="container">
         <div class="row">
 
-          <table class="table table-sm table-bordered table-striped">
+          <table class="table table-sm table-bordered table-striped table-responsive">
             <thead>
               <th>#</th>
               <th>Car Image</th>
@@ -24,8 +24,12 @@
               <th>Total KM</th>
               <th>Rate Per Day</th>
               <th>Rate Per KM</th>
+              <th>Booking Status</th>
               <th>Amount to Pay</th>
+              <th>Payment Status</th>
+              <th>Return Status</th>
               <th>Action</th>
+
             </thead>
             <tbody>
               @if($bookedCars && count($bookedCars))
@@ -62,8 +66,31 @@
                   -
                   @endif
                 </td>
-                <td>Ksh.{{ $booking->amount_to_pay }}</td>
+                <td>
+                  @if($booking->booking_status === 'active')
+                  <span class="badge badge-success">Active</span>
+                  @elseif($booking->booking_status === 'returned')
+                  <span class="badge badge-secondary">Returned</span>
+                  @else
+                  <span class="badge badge-light">{{ ucfirst($booking->booking_status) }}</span>
+                  @endif
+                </td>
 
+                <td>Ksh.{{ $booking->amount_to_pay }}</td>
+                <td>
+                  @if($booking->payment_status === 'Paid')
+                  <span class="badge badge-success">Paid</span>
+                  @else
+                  <span class="badge badge-warning">Pending</span>
+                  @endif
+                </td>
+                <td>
+                  @if($booking->return_status === 'returned')
+                  <span class="badge badge-success">Returned</span>
+                  @else
+                  <span class="badge badge-warning">Pending</span>
+                  @endif
+                </td>
                 <td>
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -77,7 +104,13 @@
                         </a>
                       </li>
                       <li class="divider"></li>
-                    
+
+                      <li>
+                        <a href="#" class="text-warning" data-toggle="modal" data-target="#returnCarModal{{ $booking->id }}">
+                          <i class="fa fa-carriage-return"></i>Return Car
+                        </a>
+                      </li>
+
                       @if(Auth::check() && Auth::user()->role === 'Admin')
                       <li>
                         <a href="#" class="text-danger" data-toggle="modal" data-target="#deleteModal{{ $booking->id }}">
@@ -85,7 +118,7 @@
                         </a>
                       </li>
                       @else
-                      
+
 
                       {{-- The delete button is now only visible to admins --}}
                       @endif
@@ -100,7 +133,41 @@
                     </ul>
                   </div>
                 </td>
+
               </tr>
+
+              <!-- Return Car Modal -->
+              <div class="modal fade" id="returnCarModal{{ $booking->id }}" tabindex="-1" role="dialog" aria-labelledby="returnCarModalLabel{{ $booking->id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <form method="POST" action="{{ route('returnCar', $booking->id) }}">
+                    @csrf
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="returnCarModalLabel{{ $booking->id }}">Return Car</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Are you sure you want to return this car?</p>
+                        <div class="form-group">
+                          <label>Return Date</label>
+                          <input type="date" class="form-control" name="return_date" required>
+                        </div>
+                        <div class="form-group">
+                          <label>Return Time</label>
+                          <input type="time" class="form-control" name="return_time" required>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Return Car</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
 
               <!-- Payment Modal -->
               <div class="modal fade" id="paymentModal{{ $booking->id }}" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel{{ $booking->id }}" aria-hidden="true">
@@ -204,21 +271,25 @@
           @php
           $totalAmount = $bookedCars && count($bookedCars) ? $bookedCars->sum('amount_to_pay') : 0;
           @endphp
-          <div class="row justify-content-end" style="margin-bottom: 20px; margin-left: 84%;">
-            <div class="card shadow-sm border-primary mb-3" style="max-width: 20rem;">
-              <div class="card-body p-3">
-                <h6 class="card-title text-primary text-left mb-2" style="font-size: 1rem;">
-                  Total Amount to Pay:
-                </h6>
-                <h5 class="card-text text-left mb-3" style="font-size: 1.2rem;">
-                  <strong>Ksh.{{ number_format($totalAmount) }}</strong>
-                </h5>
-                <form method="POST" action="{{ route('makePaymentAll') }}">
-                  @csrf
-                  <input type="hidden" name="total_amount" value="{{ $totalAmount }}">
-                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#payAllModal">
-                    Pay All</button>
-                </form>
+
+          <div class="container-fluid px-0">
+            <div class="d-flex justify-content-end mb-3">
+              <div class="card shadow-sm border-primary mb-3 w-100" style="max-width: 200px;">
+                <div class="card-body p-3">
+                  <h6 class="card-title text-primary mb-2" style="font-size: 1rem;">
+                    Total Amount to Pay:
+                  </h6>
+                  <h5 class="card-text mb-3" style="font-size: 1.2rem;">
+                    <strong>Ksh.{{ number_format($totalAmount) }}</strong>
+                  </h5>
+                  <form method="POST" action="{{ route('makePaymentAll') }}">
+                    @csrf
+                    <input type="hidden" name="total_amount" value="{{ $totalAmount }}">
+                    <button type="button" class="btn btn-primary btn-block btn-sm" data-toggle="modal" data-target="#payAllModal">
+                      Pay All
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

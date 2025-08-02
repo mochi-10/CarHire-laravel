@@ -9,7 +9,7 @@
     </ol>
 </section>
 
-<div class="container py-5">
+<div class="box-body table-responsive">
     <table class="table table-bordered table-striped">
         <thead>
             <tr>

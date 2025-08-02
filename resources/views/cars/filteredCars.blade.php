@@ -50,14 +50,13 @@
     <div class="row align-items-center">
       <div class="col-lg-7 mb-4 mb-md-0">
         <h2 class="mb-0 text-white">What are you waiting for?</h2>
-        <p class="mb-0 opa-7">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati, laboriosam.</p>
+        <p class="mb-0 opa-7">Hire a car now and enjoy your trip.</p>
       </div>
-      <div class="col-lg-5 text-md-right">
-        <a href="#" class="btn btn-primary btn-white">Rent a car now</a>
+      <div class="col-lg-4 ml-auto">
+        <p class="mb-0"><a href="{{ route('carListings') }}" class="btn btn-white btn-outline-white">Available Cars</a></p>
       </div>
     </div>
   </div>
-</div>
 
 <!-- <div class="site-section">
   <div class="container">

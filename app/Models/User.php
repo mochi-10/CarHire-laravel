@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Message;
 
 class User extends Authenticatable
 {
@@ -50,7 +51,7 @@ class User extends Authenticatable
 
     public function message()
     {
-        return $this->hasMany(\App\Models\Message::class, 'user_id');
+        return $this->hasMany(Message::class, 'user_id');
     }
 
 

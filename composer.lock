@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d84b7b6beca3b26d544ebb37e3a241d",
+    "content-hash": "d5df46cd352ff94813d6831b86e0bcab",
     "packages": [
+        {
+            "name": "africastalking/africastalking",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AfricasTalkingLtd/africastalking-php.git",
+                "reference": "8345423ee70b07b36cedcce61c85c9bc679e3666"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AfricasTalkingLtd/africastalking-php/zipball/8345423ee70b07b36cedcce61c85c9bc679e3666",
+                "reference": "8345423ee70b07b36cedcce61c85c9bc679e3666",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0 || ^7.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AfricasTalking\\SDK\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Africas's Talking",
+                    "email": "support@africastalking.com",
+                    "homepage": "https://www.africastalking.com"
+                }
+            ],
+            "description": "Official Africa's Talking PHP SDK",
+            "homepage": "http://github.com/AfricasTalkingLtd/africastalking-php",
+            "keywords": [
+                "Africastalking",
+                "airtime",
+                "api",
+                "sms",
+                "text message",
+                "ussd",
+                "voice"
+            ],
+            "support": {
+                "issues": "https://github.com/AfricasTalkingLtd/africastalking-php/issues",
+                "source": "https://github.com/AfricasTalkingLtd/africastalking-php/tree/v3.0.2"
+            },
+            "time": "2024-03-07T12:27:18+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
@@ -1281,6 +1336,48 @@
                 }
             ],
             "time": "2025-02-03T10:55:03+00:00"
+        },
+        {
+            "name": "kiveu/mpesa",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alvin-kiveu/Mpesa-Daraja-Api-Php-Sdk.git",
+                "reference": "34da22484b5494a7ba36f4f7a9be4931a0807139"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alvin-kiveu/Mpesa-Daraja-Api-Php-Sdk/zipball/34da22484b5494a7ba36f4f7a9be4931a0807139",
+                "reference": "34da22484b5494a7ba36f4f7a9be4931a0807139",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MpesaSdk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alvin Kiveu",
+                    "email": "alvo967@gmail.com",
+                    "homepage": "https://umeskiasoftwares.com"
+                }
+            ],
+            "description": "This is a PHP SDK for the M-Pesa API for Mpesa Daraja API 2.0 2024",
+            "support": {
+                "issues": "https://github.com/alvin-kiveu/Mpesa-Daraja-Api-Php-Sdk/issues",
+                "source": "https://github.com/alvin-kiveu/Mpesa-Daraja-Api-Php-Sdk/tree/v1.1.0"
+            },
+            "time": "2024-06-27T08:21:08+00:00"
         },
         {
             "name": "laravel/framework",

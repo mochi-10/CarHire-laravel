@@ -11,7 +11,7 @@
                         <i class="fa fa-plus"></i> Add New Car
                     </button>
                 </div>
-                <div class="box-body">
+                <div class="box-body table-responsive">
                     <div class="row mb-3">
                     <div class="col-md-4 col-sm-6">
                         <input type="text" id="carTableSearch" class="form-control" placeholder="Search Car...">

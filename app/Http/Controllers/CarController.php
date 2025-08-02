@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Response;
 use phpoffice\PhpSpreadsheet\Spreadsheet;
 use phpoffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\CarModel;
+use App\Models\Booking;
 
 class CarController extends Controller
 {
@@ -121,14 +122,17 @@ class CarController extends Controller
 
     public function welcome()
     {
-        $carModels= CarModel::all();
-        $cars = Car::with('carModel')->get();
-        return view('welcome', compact('cars', 'carModels'));
+        $carModels = CarModel::all();
+        $bookedCars = Booking::with('carModel')->where('booking_status', 'active')->pluck('car_id')->toArray();
+        $cars = Car::with('carModel')->whereNotIn('id', $bookedCars)->get();
+        $allCars = Car::with('carModel')->get(); // All cars for gallery
+        return view('welcome', compact('cars', 'carModels', 'allCars'));
     }
 
     public function searchCar(Request $request){
         $carModels= CarModel::all();
-        $cars = Car::with('carModel')->where('car_model_id', $request->car_model_id)->get();
+        $bookedCars = Booking::where('booking_status', 'active')->pluck('car_id')->toArray();
+        $cars = Car::with('carModel')->where('car_model_id', $request->car_model_id)->whereNotIn('id', $bookedCars)->get(); 
         return view('cars.filteredCars', compact('cars', 'carModels'));
     }
 
@@ -148,6 +152,13 @@ class CarController extends Controller
         $carModels= CarModel::all();
         $car = Car::with('carModel')->where('id', $request->car_id)->first();
         return view('cars.carDetailsPerKm', compact('car','carModels',));
+    }
+
+    public function carListings(){
+        // Get cars that are not currently booked (booking_status = 'active')
+        $bookedCars = Booking::where('booking_status', 'active')->pluck('car_id')->toArray();
+        $cars = Car::with('carModel')->whereNotIn('id', $bookedCars)->get();
+        return view('cars.carListings', compact('cars'));
     }
     
 }

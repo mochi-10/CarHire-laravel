@@ -91,42 +91,44 @@
                         <input type="text" id="carTableSearch" class="form-control" placeholder="Search Car...">
                     </div> -->
                 </div>
-                <table id="carsTable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Car Image</th>
-                            <th>Make</th>
-                            <th>Model</th>
-                            <th>Registration</th>
-                            <th>Year</th>
-                            <th>Color</th>
-                            <!-- <th>Rate/Day</th>
-                            <th>Rate/Km</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($cars as $key => $car)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td>
-                                @if($car->image)
-                                    <img src="{{ asset('images/' . $car->image) }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="Car Image">
-                                @else
-                                    <img src="{{ asset('images/default-car.png') }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="No Image">
-                                @endif
-                            </td>
-                            <td>{{ $car->make }}</td>
-                            <td>{{ $car->carModel->name ?? 'NA' }}</td>
-                            <td>{{ $car->registration_number }}</td>
-                            <td>{{ $car->year }}</td>
-                            <td>{{ $car->color }}</td>
-                            <!-- <td>{{ $car->rate_per_day }}</td>
-                            <td>{{ $car->rate_per_km }}</td> -->
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="carsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Car Image</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Registration</th>
+                                <th>Year</th>
+                                <th>Color</th>
+                                <!-- <th>Rate/Day</th>
+                                <th>Rate/Km</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($cars as $key => $car)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>
+                                    @if($car->image)
+                                        <img src="{{ asset('images/' . $car->image) }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="Car Image">
+                                    @else
+                                        <img src="{{ asset('images/default-car.png') }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="No Image">
+                                    @endif
+                                </td>
+                                <td>{{ $car->make }}</td>
+                                <td>{{ $car->carModel->name ?? 'NA' }}</td>
+                                <td>{{ $car->registration_number }}</td>
+                                <td>{{ $car->year }}</td>
+                                <td>{{ $car->color }}</td>
+                                <!-- <td>{{ $car->rate_per_day }}</td>
+                                <td>{{ $car->rate_per_km }}</td> -->
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- /.box-body -->
         </div>
@@ -140,41 +142,43 @@
                 <h3 class="box-title text-primary" style="font-weight:bold;">{{ $bookedCars->count() ?? 0 }} : Booked Cars</h3>
             </div>
             <div class="box-body">
-                <table id="bookedCarsTable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Car Image</th>
-                            
-                            <th>Model</th>
-                            <th>Registration</th>
-                            <th>Total Days</th>
-                            <th>Total KM</th>
-                            <th>Amount to pay</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($bookedCars as $key => $booking)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td>
-                                @if($booking->car && $booking->car->image)
-                                    <img src="{{ asset('images/' . $booking->car->image) }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="Car Image">
-                                @else
-                                    <img src="{{ asset('images/default-car.png') }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="No Image">
-                                @endif
-                            </td>
-                            <td>{{ $booking->car->carModel->name ?? 'NA' }}</td>
-                            <td>{{ $booking->car->registration_number ?? 'NA' }}</td>
-                            <td>{{ $booking->total_days ?? 'NA' }}</td>
-                            <td>{{ $booking->total_km ?? 'NA' }}</td>
-                            <td>{{ $booking->amount_to_pay ?? 'NA' }}</td>
-                            <!-- Example: show booking-specific data -->
-                            <!-- <td>{{ $booking->created_at->format('Y-m-d') }}</td> -->
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="bookedCarsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Car Image</th>
+                                
+                                <th>Model</th>
+                                <th>Registration</th>
+                                <th>Total Days</th>
+                                <th>Total KM</th>
+                                <th>Amount to pay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($bookedCars as $key => $booking)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>
+                                    @if($booking->car && $booking->car->image)
+                                        <img src="{{ asset('images/' . $booking->car->image) }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="Car Image">
+                                    @else
+                                        <img src="{{ asset('images/default-car.png') }}" class="img-responsive" style="width:100px; height:60px; object-fit:cover;" alt="No Image">
+                                    @endif
+                                </td>
+                                <td>{{ $booking->car->carModel->name ?? 'NA' }}</td>
+                                <td>{{ $booking->car->registration_number ?? 'NA' }}</td>
+                                <td>{{ $booking->total_days ?? 'NA' }}</td>
+                                <td>{{ $booking->total_km ?? 'NA' }}</td>
+                                <td>{{ $booking->amount_to_pay ?? 'NA' }}</td>
+                                <!-- Example: show booking-specific data -->
+                                <!-- <td>{{ $booking->created_at->format('Y-m-d') }}</td> -->
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

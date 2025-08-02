@@ -6,6 +6,8 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarModelController;
 use App\Http\Controllers\MyProfileController;
+use App\Http\Controllers\SmsController;
+use App\Http\Controllers\MpesaController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -57,18 +59,24 @@ Route::get('/', [CarController::class, 'welcome'])->middleware('auth')->name('we
 Route::post('/bookcarPerDay', [BookingController::class, 'bookCarPerDay'])->name('bookCarPerDay');
 Route::post('/bookcarPerKm', [BookingController::class, 'bookCarPerKm'])->name('bookCarPerKm');
 Route::get('/customerBookings', [BookingController::class, 'customerBookings'])->name('customerBookings');
+Route::get('/carListings', [CarController::class, 'carListings'])->name('carListings');
 Route::get('/adminDashboard', [HomeController::class, 'adminDashboard'])->name('adminDashboard');
 Route::post('/makePayment/{booking}', [BookingController::class, 'makePayment'])->name('makePayment');
 Route::get('/downloadReceipt/{booking}', [BookingController::class, 'downloadReceipt'])->name('downloadReceipt');
 Route::post('/deleteBooking/{booking}', [BookingController::class, 'destroy'])->name('deleteBooking');
 Route::post('/makePaymentAll', [BookingController::class, 'makePaymentAll'])->name('makePaymentAll');
 
-Route::post('forgotPasswordEmail', [UserController::class, 'forgotPasswordEmail'])->name('forgotPasswordEmail');
-Route::get('forgotPassword', [UserController::class, 'forgotPasswordForm'])->name('forgotPasswordForm');
-
-
-
+Route::post('/returnCar/{booking}', [BookingController::class, 'returnCar'])->name('returnCar');
 Route::post('/contact-submit', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/contact-messages', [ContactController::class, 'messages'])->name('contact.messages')->middleware('auth');
 Route::post('/deleteMessage/{message}', [ContactController::class, 'deleteMessage'])->name('deleteMessage');
 Route::post('/replyMessage/{message}', [ContactController::class, 'replyMessage'])->name('replyMessage');
+
+Route::post('/sendResetPassword', [UserController::class, 'sendResetPassword'])->name('sendResetPassword');
+Route::get('forgotPassword', [UserController::class, 'forgotPassword'])->name('forgotPassword');
+
+Route::get('/sms', [SmsController::class, 'sms'])->name('sms');
+Route::get('/mpesa', [MpesaController::class, 'mpesa'])->name('mpesa');
+
+// M-Pesa callback route (no CSRF protection needed for external callbacks)
+Route::post('/mpesa/callback', [BookingController::class, 'mpesaCallback'])->name('mpesa.callback')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);

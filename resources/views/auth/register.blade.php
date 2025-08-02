@@ -110,6 +110,17 @@
             });
         });
     </script>
+    @include('sweetalert::alert')
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Failed',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 </body>
 
 </html>
