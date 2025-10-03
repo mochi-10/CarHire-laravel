@@ -193,11 +193,11 @@
                         </div>
                         <div class="form-group">
                             <label>Rate Per Day</label>
-                            <input type="number" step="1000" class="form-control" name="rate_per_day" value="{{ $car->rate_per_day }}" required>
+                            <input type="number" min="1000" step="100" class="form-control" name="rate_per_day" value="{{ $car->rate_per_day }}" required>
                         </div>
                         <div class="form-group">
                             <label>Rate Per Km</label>
-                            <input type="number" step="100" class="form-control" name="rate_per_km" value="{{ $car->rate_per_km }}" required>
+                            <input type="number" min="100" step="10" class="form-control" name="rate_per_km" value="{{ $car->rate_per_km }}" required>
                         </div>
                        
                     </div>
@@ -276,7 +276,7 @@
                             <label>Year</label>
                             <select class="form-control" name="year" required>
                                 @for($y = 1999; $y <= date('Y'); $y++)
-                                    <option value="{{ $y }}" {{ $car->year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                    <option value="{{ $y }}">{{ $y }}</option>
                                 @endfor
                             </select>
                         </div>
@@ -286,11 +286,11 @@
                         </div>
                         <div class="form-group">
                             <label>Rate Per Day</label>
-                            <input type="number" step="1000" class="form-control" name="rate_per_day" required>
+                            <input type="number" min="1000" step="100" class="form-control" name="rate_per_day" required>
                         </div>
                         <div class="form-group">
                             <label>Rate Per Km</label>
-                            <input type="number" step="100" class="form-control" name="rate_per_km" required>
+                            <input type="number" min="100" step="10" class="form-control" name="rate_per_km" required>
                         </div>
                        
                   </div>

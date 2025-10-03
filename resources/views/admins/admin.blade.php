@@ -1,19 +1,20 @@
 @extends('layouts.backend')
 
 @section('content')
-   <!-- Main content -->
-    <section class="content">
+
+<section class="content">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title text-primary" style="font-weight:bold;">{{ $total_users ?? 0}} : Users List</h3>
+              <h3 class="box-title text-primary" style="font-weight:bold;">{{ $total_admins ?? 0}} : Admins List</h3>
               <button class="btn btn-primary btn-sm" style="float: right;" data-toggle="modal" data-target="#uploadFileModal">
                 <i class="fa fa-upload"></i> Upload
               </button>
-              <button class="btn btn-success btn-sm" style="float: right;" data-toggle="modal" data-target="#addUserModal">
-                <i class="fa fa-user-plus"></i> Add New User
+              <button class="btn btn-success btn-sm" style="float: right;" data-toggle="modal" data-target="#addAdminModal">
+                <i class="fa fa-user-plus"></i> Add New Admin
               </button>
+
               <!-- <button class="btn btn-info btn-sm" style="float: right; margin-right: 5px;" data-toggle="modal" data-target="#addMemberModal">
                 <i class="fa fa-user"></i> Add Member
               </button> -->
@@ -34,21 +35,14 @@
                 </tr>
                 </thead>
               <tbody>
-                @foreach($users as $key=>$user)
+                @foreach($admins as $key=>$admin)
                 <tr>                 
-                  <td>{{($users->currentPage() - 1) * $users->perPage() + $key + 1 }}</td>
-                  <td>{{ $user->firstname }} {{ $user->lastname }}</td>
-                  <td>{{ $user->phonenumber }}</td>
-                  <td>{{ $user->email }}</td>
-                  <td>{{ $user->address }}</td>
-                  <td>{{ $user->role }}</td>
-                  <!-- <td>
-                      @if($user->is_member)
-                          <span class="text-success"><i class="fa fa-check"></i> Yes</span>
-                      @else
-                          <span class="text-danger"><i class="fa fa-times"></i> No</span>
-                      @endif
-                  </td> -->
+                  <td>{{($admins->currentPage() - 1) * $admins->perPage() + $key + 1 }}</td>
+                  <td>{{ $admin->user->firstname }} {{ $admin->user->lastname }}</td>
+                  <td>{{ $admin->user->phonenumber }}</td>
+                  <td>{{ $admin->user->email }}</td>
+                  <td>{{ $admin->user->address }}</td>
+                  <td>Admin</td>
                   <td>
                       <div class="btn-group">
                       <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -58,55 +52,46 @@
                       <ul class="dropdown-menu" role="menu">
                         <center><li><b>More Action</b></li></center>
                         <li class="divider"></li>
-                        <li><a href="#" class="text-green" data-toggle="modal" data-target="#UpdateUserModal{{ $user->id }}">
+                        <li><a href="#" class="text-green" data-toggle="modal" data-target="#UpdateAdminModal{{ $admin->id }}">
                             <i class="fa fa-edit"></i> Update</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" class="text-red" data-toggle="modal" data-target="#deleteUserModal{{ $user->id }}">
+                        <li><a href="#" class="text-red" data-toggle="modal" data-target="#deleteAdminModal{{ $admin->id }}">
                         <i class="fa fa-trash"></i> Delete</a></li>
                       </ul>
                   </div>
                 </td>
               </tr>
 
-            <!-- Update User Modal -->
-            <div class="modal fade" id="UpdateUserModal{{ $user->id }}">
+            <!-- Update Admin Modal -->
+            <div class="modal fade" id="UpdateAdminModal{{ $admin->id }}">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                  <h5 class="modal-title text-primary" style="font-weight:bold;"><i class="fa fa-user-edit"></i> Updating User: {{ $user->firstname ?? 'NA' }} {{ $user->lastname ?? 'NA' }}</h5>
+                  <h5 class="modal-title text-primary" style="font-weight:bold;"><i class="fa fa-user-edit"></i> Updating Admin: {{ $admin->user->firstname ?? 'NA' }} {{ $admin->user->lastname ?? 'NA' }}</h5>
                   </div>
-                  <form method="POST" action="{{ route('adminUpdateUser') }}">
+                  <form method="POST" action="{{ route('adminUpdateAdmin') }}">
                     @csrf
                   <div class="modal-body">
-                    <input type="text" name="id" value="{{ $user->id }}" hidden="true">
+                    <input type="text" name="id" value="{{ $admin->id }}" hidden="true">
                     <div class="form-group">
                         <label>Firstname</label>
-                        <input type="text" class="form-control" name="firstname" value="{{ $user->firstname }}" required>
+                        <input type="text" class="form-control" name="firstname" value="{{ $admin->user->firstname }}" required>
                     </div>
                     <div class="form-group">
                         <label>Lastname</label>
-                        <input type="text" class="form-control" name="lastname" value="{{ $user->lastname }}" required>
+                        <input type="text" class="form-control" name="lastname" value="{{ $admin->user->lastname }}" required>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="text" class="form-control" name="email" value="{{ $user->email }}" required>
+                        <input type="text" class="form-control" name="email" value="{{ $admin->user->email }}" required>
                     </div>
                     <div class="form-group">
                         <label>Phonenumber</label>
-                        <input type="text" class="form-control" name="phonenumber" value="{{ $user->phonenumber }}" required>
+                        <input type="text" class="form-control" name="phonenumber" value="{{ $admin->user->phonenumber }}" required>
                     </div>
                     <div class="form-group">
                         <label>Address</label>
-                        <input type="text" class="form-control" name="address" value="{{ $user->address }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Role</label>
-                        <select class="form-control" name="role" required>
-                            <option value="{{$user->role}}">{{$user->role}}</option>
-                            <!-- <option value="Admin">Admin</option> -->
-                            <option value="Customer">Customer</option>
-                            <option value="Data_clerk">Data Clerk</option>
-                        </select>
+                        <input type="text" class="form-control" name="address" value="{{ $admin->user->address }}" required>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -117,19 +102,19 @@
                 </div>
               </div>
             </div>
-            <!-- End Update User Modal -->
+            <!-- End Update Admin Modal -->
 
-            <!-- Delete User Modal -->
-            <div class="modal fade" id="deleteUserModal{{ $user->id }}">
+            <!-- Delete Admin Modal -->
+            <div class="modal fade" id="deleteAdminModal{{ $admin->id }}">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5>Are you sure you want to delete this record?</h5>
                   </div>
-                  <form method="POST" action="{{ route('adminDeleteUser') }}">
+                  <form method="POST" action="{{ route('adminDeleteAdmin') }}">
                     @csrf
                   <div class="modal-body">
-                    <input type="text" name="id" value="{{ $user->id }}" hidden="true">
+                    <input type="text" name="id" value="{{ $admin->id }}" hidden="true">
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
@@ -139,10 +124,20 @@
                 </div>
               </div>
             </div>
-            <!-- End Delete User Modal -->
+            <!-- End Delete Admin Modal -->
                
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
 
-      <!-- Upload File Modal -->
+<!-- Upload File Modal -->
       <div class="modal fade" id="uploadFileModal">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -175,15 +170,15 @@
       </div>
       <!-- End Upload File Modal -->
 
-      <!-- Add User Modal -->
-      <div class="modal fade" id="addUserModal">
+      <!-- Add Admin Modal -->
+      <div class="modal fade" id="addAdminModal">
         <div class="modal-dialog">
           <div class="modal-content">
-            <form method="POST" action="{{ route('adminAddUser') }}">
+            <form method="POST" action="{{ route('adminAddAdmin') }}">
               @csrf
               <div class="modal-header">
                 <h5 class="modal-title text-primary" style="font-weight:bold;">
-                  <i class="fa fa-user-plus"></i> Add New User
+                  <i class="fa fa-user-plus"></i> Add New Admin
                 </h5>
               </div>
               <div class="modal-body">
@@ -207,15 +202,6 @@
                   <label>Address</label>
                   <input type="text" class="form-control" name="address" required>
                 </div>
-                <div class="form-group">
-                  <label>Role</label>
-                  <select class="form-control" name="role" required>
-                    <option value="">Select ...</option>
-                    <!-- <option value="Admin">Admin</option> -->
-                    <option value="Customer">Customer</option>
-                    <option value="Data_clerk">Data Clerk</option>
-                  </select>
-                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
@@ -225,7 +211,7 @@
           </div>
         </div>
       </div>
-      <!-- End Add User Modal -->
+      <!-- End Add Admin Modal -->
       
      
       <!-- Add Member Modal -->
@@ -280,43 +266,10 @@
           </div>
       </div> -->
       
-      @endforeach
-  </tbody>
-  </table>
-                  <!-- Pagination -->
-                   <div class="d-flex justify-content-end mt-3">
-                        <nav aria-label="User pagination">
-                            <ul class="pagination pagination-lg" style="margin:0;">
-                                {{ $users->onEachSide(1)->links('pagination::bootstrap-4') }}
-                            </ul>
-                        </nav>
-                    </div>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
 
-                    <style>
-                        .pagination-lg .page-link {
-                            font-size: 1.2rem;
-                            padding: 0.75rem 1.25rem;
-                            color: #007bff;
-                            border-radius: 0.3rem;
-                            margin: 0 2px;
-                            transition: background 0.2s, color 0.2s;
-                        }
-                        .pagination-lg .page-item.active .page-link {
-                            background-color: #007bff;
-                            color: #fff;
-                            border-color: #007bff;
-                        }
-                        .pagination-lg .page-link:hover {
-                            background: #e9ecef;
-                            color: #0056b3;
-                        }
-                    </style>
-                    <!-- End Pagination -->
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    
 @endsection

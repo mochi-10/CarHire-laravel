@@ -5,8 +5,8 @@
     <section class="content-header">
       <h1 class="text-primary" style="font-weight:bold;">Dashboard</h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ route('welcome') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ route('adminDashboard') }}">Dashboard</a></li>
         <li class="active">Admin</li>
       </ol>
     </section>

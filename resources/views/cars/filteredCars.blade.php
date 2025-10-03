@@ -45,18 +45,16 @@
   </div>
 </div>
 
-<div class="site-section bg-primary py-5">
+<!-- <div class="site-section bg-primary py-3">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-7 mb-4 mb-md-0">
-        <h2 class="mb-0 text-white">What are you waiting for?</h2>
-        <p class="mb-0 opa-7">Hire a car now and enjoy your trip.</p>
-      </div>
-      <div class="col-lg-4 ml-auto">
-        <p class="mb-0"><a href="{{ route('carListings') }}" class="btn btn-white btn-outline-white">Available Cars</a></p>
+    <div class="row justify-content-center align-items-center" style="height: 30px;">
+      <div class="col-lg-7 text-center">
+        <h2 class="mb-2 text-white font-weight-bold" style="font-size: 1.7rem;">What are you waiting for?</h2>
+        <p class="mb-3 opa-7 text-white" style="font-size: 1rem;">Hire a car now and enjoy your trip!!</p>
+        <a href="{{ route('carListings') }}" class="btn btn-white btn-outline-white px-3 py-1" style="font-size: 0.95rem;">Available Cars</a>
       </div>
     </div>
-  </div>
+  </div> -->
 
 <!-- <div class="site-section">
   <div class="container">

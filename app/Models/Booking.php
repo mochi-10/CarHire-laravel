@@ -15,9 +15,16 @@ class Booking extends Model
         'total_days',
         'total_km',
         'amount_to_pay',
-        'booking-status',
+        'booking_status',
         'payment_status',
         'return_status',
+        'return_date',
+        'return_time',
+        'payment_method',
+        'transaction_reference',
+        'checkout_request_id',
+        'mpesa_receipt_number',
+        'transaction_date',
     ];
 
     public function car()

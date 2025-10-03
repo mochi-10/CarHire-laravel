@@ -36,16 +36,6 @@ class HomeController extends Controller
         return view('home', compact('total_models', 'total_cars', 'total_users', 'cars', 'bookedCars'));
     }
 
-    // public function dashboard()
-    // {
-    //     $total_models = CarModel::count();
-    //     $total_cars = Car::count();
-    //     $total_users = User::count();
-    //     $cars = Car::with('carModel')->latest()->take(5)->get();
-
-    //     return view('dashboard', compact('total_models', 'total_cars', 'total_users', 'cars'));
-    // }
-
     public function adminDashboard()
     {
         $total_models = CarModel::count();

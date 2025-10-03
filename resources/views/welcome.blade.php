@@ -17,10 +17,10 @@
               <select name="car_model_id" id="car_model_id" class="custom-select form-control" required>
                 <option value="">Select Model</option>
                 @if(!empty($carModels))
-                  @foreach($carModels as $carModel)
-                    <option value="{{ $carModel->id }}">{{ $carModel->name ?? 'NA'}}</option>
-                  @endforeach
-                  @endif
+                @foreach($carModels as $carModel)
+                <option value="{{ $carModel->id }}">{{ $carModel->name ?? 'NA'}}</option>
+                @endforeach
+                @endif
               </select>
             </div>
             <!-- <div class="mb-3 mb-md-0 col-md-3">
@@ -45,22 +45,20 @@
   </div>
 </div>
 
-<div class="site-section bg-primary py-5">
+<div class="site-section bg-primary py-3">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-7 mb-4 mb-md-0">
-        <h2 class="mb-0 text-white">What are you waiting for?</h2>
-        <p class="mb-0 opa-7">Hire a car now and enjoy your trip!!</p>
-      </div>
-      <div class="col-lg-4 ml-auto">
-        <p class="mb-0"><a href="{{ route('carListings') }}" class="btn btn-white btn-outline-white">Available Cars</a></p>
+    <div class="row justify-content-center align-items-center" style="height: 30px;">
+      <div class="col-lg-7 text-center">
+        <h2 class="mb-2 text-white font-weight-bold" style="font-size: 1.7rem;">What are you waiting for?</h2>
+        <p class="mb-3 opa-7 text-white" style="font-size: 1rem;">Hire a car now and enjoy your trip!!</p>
+        <a href="{{ route('carListings') }}" class="btn btn-white btn-outline-white px-3 py-1" style="font-size: 0.95rem;">Available Cars</a>
       </div>
     </div>
   </div>
 
 
 
-<!-- <div class="site-section">
+  <!-- <div class="site-section">
   <div class="container">
     <h2 class="section-heading"><strong>How it works?</strong></h2>
     <p class="mb-5">Easy steps to get you started</p>
@@ -109,7 +107,7 @@
   </div>
 </div> -->
 
-<!-- <div class="site-section">
+  <!-- <div class="site-section">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-7 text-center order-lg-2">
@@ -128,7 +126,7 @@
 
 
 
-<!-- <div class="site-section">
+  <!-- <div class="site-section">
   <div class="container">
     <div class="row">
       <div class="col-lg-7">
@@ -268,7 +266,60 @@
   </div>
 </div> -->
 
-<div class="site-section bg-light">
+  <div class="site-section bg-light" style="margin-top: 140px;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7">
+          <h2 class="section-heading"><strong>Car Listings</strong></h2>
+          <p class="mb-5">Browse our available cars below.</p>
+        </div>
+      </div>
+      <div class="row">
+        @foreach($cars as $car)
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="listing d-block align-items-stretch">
+            <div class="listing-img h-100 mr-4">
+              @if($car->image)
+              <img src="{{ asset('images/' . $car->image) }}" alt="Image" class="img-fluid">
+              @else
+              <img src="{{ asset('images/default-car.png') }}" alt="No Image" class="img-fluid">
+              @endif
+            </div>
+            <div class="listing-contents h-100">
+              <h3>{{ $car->make }} {{ $car->carModel->name ?? $car->model }}</h3>
+              <div class="rent-price">
+                <strong>Ksh {{ number_format($car->rate_per_day) }}</strong><span class="mx-1">/</span>day |
+                <strong>Ksh {{ number_format($car->rate_per_km) }}</strong><span class="mx-1">/</span>Km
+              </div>
+              <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                <div class="listing-feature pr-4">
+                  <span class="caption">Year:</span>
+                  <span class="number">{{ $car->year }}</span>
+                </div>
+                <div class="listing-feature pr-4">
+                  <span class="caption">Color:</span>
+                  <span class="number">{{ $car->color }}</span>
+                </div>
+                <div class="listing-feature pr-4">
+                  <span class="caption">Reg:</span>
+                  <span class="number">{{ $car->registration_number }}</span>
+                </div>
+              </div>
+              <div>
+                <p>
+                  <a href="{{ route('carDetailsPerDay', ['car_id' => $car->id]) }}" class="btn btn-primary btn-sm mr-2">Rent(Day)</a>
+                  <a href="{{ route('carDetailsPerKm', ['car_id' => $car->id]) }}" class="btn btn-primary btn-sm">Rent(Km)</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endforeach
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="site-section bg-light">
   <div class="container">
     <div class="row">
       <div class="col-lg-7">
@@ -317,12 +368,16 @@
                 <span class="badge badge-success">Not Booked</span>
               @endif
             </div>
+            <p>
+                <a href="{{ route('carDetailsPerDay', ['car_id' => $car->id]) }}" class="btn btn-primary btn-sm mr-2">Rent(Day)</a>
+                <a href="{{ route('carDetailsPerKm', ['car_id' => $car->id]) }}" class="btn btn-primary btn-sm">Rent(Km)</a>
+              </p>
           </div>
         </div>
       </div>
       @endforeach
     </div>
   </div>
-</div>
+</div> -->
 
-@endsection
+  @endsection

@@ -79,7 +79,14 @@
                                     @csrf
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title text-primary" id="replyMessageModalLabel{{ $msg->id }}">Reply to {{ $msg->user->firstname }} {{ $msg->user->lastname }}</h5>
+                                            <h5 class="modal-title text-primary" id="replyMessageModalLabel{{ $msg->id }}">
+                                                Reply to
+                                                @if($msg->user)
+                                                    {{ $msg->user->firstname }} {{ $msg->user->lastname }}
+                                                @else
+                                                    Guest
+                                                @endif
+                                            </h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                
                                             </button>

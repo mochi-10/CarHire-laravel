@@ -52,7 +52,7 @@
     </div>
 
 
-    <div class="site-section bg-primary py-5">
+    <!-- <div class="site-section bg-primary py-5">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-7 mb-4 mb-md-0">
@@ -64,5 +64,5 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 @endsection

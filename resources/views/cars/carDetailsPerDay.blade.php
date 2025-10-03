@@ -34,8 +34,9 @@
               <li><strong>Color:</strong> {{ $car->color }}</li>
               <li><strong>Registration Number:</strong> {{ $car->registration_number }}</li>
 
-              <li>Rate per Day:
-                <form method="POST" action="{{ route('bookCarPerDay', ['car_id' => $car->id]) }}">
+              <li>Rate per Day: Ksh {{ number_format($car->rate_per_day) }}
+                <div id="rate-data" data-rate="{{ $car->rate_per_day }}" style="display: none;"></div>
+                <form method="POST" action="{{ route('redirectToPaymentPagePerDay') }}" id="bookingForm">
                   @csrf
                   <div class="form-group row">
                     <input type="hidden" name="car_id" value="{{ $car->id }}">
@@ -45,12 +46,41 @@
                       <label>Enter Number of Days</label>
                     </div>
                     <div class="col-md-6">
-                      <input type="number" name="total_days" class="form-control" min="1" placeholder="Number of Days" required>
+                      <input type="number" name="total_days" id="total_days" class="form-control" min="1" placeholder="Number of Days" required>
                     </div>
                   </div>
-                  <p class="mt-4">
-                    <button type="submit" class="btn btn-primary w-75">submit</button>
-                  </p>
+
+                  <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                      const rate = parseFloat(document.getElementById('rate-data').dataset.rate);
+                      const daysInput = document.getElementById('total_days');
+                      const amountDisplay = document.getElementById('amount-display');
+
+                      function updateAmount() {
+                          const days = parseInt(daysInput.value) || 0;
+                          const amount = rate * days;
+                          amountDisplay.textContent = amount.toLocaleString();
+                      }
+
+                      daysInput.addEventListener('input', updateAmount);
+                  });
+                  </script>
+                  
+                  <!-- Amount Display Box -->
+                  <div class="form-group row mt-3">
+                    <div class="col-md-6 mb-4 mb-lg-0">
+                      <label>Total Amount:</label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-control bg-light" style="font-weight: bold; color: #007bff;">
+                        Ksh <span id="amount-display">0</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-success w-75 mb-2">Payment & Book</button>
+                  </div>
                 </form>
               </li>
             </ul>
@@ -63,4 +93,4 @@
       </div>
     </div>
   </div>
-  @endsection
+@endsection

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarModelController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\SmsController;
 use App\Http\Controllers\MpesaController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ContactController;
@@ -30,15 +32,19 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/admin',[AdminController::class, 'admin'])->name('admin');
 Route::post('/addUser', [UserController::class, 'adminAddUser'])->name('adminAddUser');
+Route::post('/addAdmin', [AdminController::class, 'adminAddAdmin'])->name('adminAddAdmin');
 Route::post('/updateUser', [UserController::class, 'adminUpdateUser'])->name('adminUpdateUser');
+Route::post('/updateAdmin', [AdminController::class, 'adminUpdateAdmin'])->name('adminUpdateAdmin');
 Route::post('/deleteUser', [UserController::class, 'adminDeleteUser'])->name('adminDeleteUser');
+Route::post('/deleteAdmin', [AdminController::class, 'adminDeleteAdmin'])->name('adminDeleteAdmin');
 Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
 Route::post('/addCar', [CarController::class, 'adminAddCar'])->name('adminAddCar');
 Route::post('/updateCar', [CarController::class, 'adminUpdateCar'])->name('adminUpdateCar');
 Route::post('/deleteCar', [CarController::class, 'adminDeleteCar'])->name('adminDeleteCar');
-Route::post('/searchCar', [CarController::class, 'searchCar'])->name('searchCar.index');
 Route::resource('car-models', CarModelController::class);
+Route::post('/searchCar', [CarController::class, 'searchCar'])->name('searchCar.index');
 Route::get('/myProfile', [MyProfileController::class, 'profile'])->name('profile.index');
 Route::post('/myProfile/update', [MyProfileController::class, 'updateProfile'])->name('profile.update');
 Route::get('/customerRegistration', [UserController::class, 'customerRegistration'])->name('customerRegistration');
@@ -58,7 +64,18 @@ Route::post('/upload-file', [UserController::class, 'uploadFile'])->name('upload
 Route::get('/', [CarController::class, 'welcome'])->middleware('auth')->name('welcome');
 Route::post('/bookcarPerDay', [BookingController::class, 'bookCarPerDay'])->name('bookCarPerDay');
 Route::post('/bookcarPerKm', [BookingController::class, 'bookCarPerKm'])->name('bookCarPerKm');
+
+// Route::post('/createBookingAndRedirectToPayment', [BookingController::class, 'createBookingAndRedirectToPayment'])->name('createBookingAndRedirectToPayment');
+Route::match(['get', 'post'],'/redirectToPaymentPagePerDay', [BookingController::class, 'redirectToPaymentPagePerDay'])->name('redirectToPaymentPagePerDay');
+Route::match(['get', 'post'],'/redirectToPaymentPagePerKm', [BookingController::class, 'redirectToPaymentPagePerKm'])->name('redirectToPaymentPagePerKm');
+
+Route::get('/process-payment-direct/{car}', [BookingController::class, 'showDirectPaymentPage'])->name('process.payment.direct');
+Route::post('/process-booking-payment-direct', [BookingController::class, 'processDirectBookingPayment'])->name('process.booking.payment.direct');
+Route::post('/bookcarPerKm', [BookingController::class, 'bookCarPerKm'])->name('bookCarPerKm');
+// Route::post('/initiatePaymentAndBooking', [BookingController::class, 'initiatePaymentAndBooking'])->name('initiatePaymentAndBooking');
+// Route::post('/initiatePaymentAndBookingPerKm', [BookingController::class, 'initiatePaymentAndBookingPerKm'])->name('initiatePaymentAndBookingPerKm');
 Route::get('/customerBookings', [BookingController::class, 'customerBookings'])->name('customerBookings');
+Route::get('allBookings', [BookingController::class, 'allBookings'])->name('allBookings');
 Route::get('/carListings', [CarController::class, 'carListings'])->name('carListings');
 Route::get('/adminDashboard', [HomeController::class, 'adminDashboard'])->name('adminDashboard');
 Route::post('/makePayment/{booking}', [BookingController::class, 'makePayment'])->name('makePayment');
@@ -76,7 +93,13 @@ Route::post('/sendResetPassword', [UserController::class, 'sendResetPassword'])-
 Route::get('forgotPassword', [UserController::class, 'forgotPassword'])->name('forgotPassword');
 
 Route::get('/sms', [SmsController::class, 'sms'])->name('sms');
-Route::get('/mpesa', [MpesaController::class, 'mpesa'])->name('mpesa');
+Route::get('/mpesa/{bookingId}', [MpesaController::class, 'mpesa'])->name('mpesa');
 
 // M-Pesa callback route (no CSRF protection needed for external callbacks)
-Route::post('/mpesa/callback', [BookingController::class, 'mpesaCallback'])->name('mpesa.callback')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/mpesa/callback', [BookingController::class, 'mpesaCallback'])->name('mpesa.callback');
+
+// Payment processing routes
+Route::match(['get', 'post'],'/process-payment/{booking}', [BookingController::class, 'PaymentPage'])->name('PaymentPage');
+Route::post('/process-payment', [BookingController::class, 'processPayment'])->name('processPayment');
+
+

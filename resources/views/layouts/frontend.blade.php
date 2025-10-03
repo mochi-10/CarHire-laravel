@@ -3,6 +3,7 @@
 
 <head>
   <title>Car Hire Management System</title>
+  <link rel="icon" href="{{ asset('images/car-wash.png') }}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Google Fonts -->
@@ -60,7 +61,19 @@
                 <li><a href="{{ route('carListings') }}" class="nav-link">Available Cars</a></li>
 
                 @if(Auth::check())
-                <li><a href="{{ route('customerBookings') }}" class="nav-link">My Bookings</a></li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Bookings
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="bookingsDropdown">
+                    <a class="dropdown-item" href="{{ route('customerBookings') }}">My Bookings</a>
+
+                    @if(Auth::check() && Auth::user()->role === 'Admin')
+                    <a class="dropdown-item" href="{{ route('allBookings') }}">Customer Bookings</a>
+                    @endif
+                    
+                  </div>
+                </li>
                 @endif
 
                 <li><a href="{{ route('about') }}" class="nav-link">About</a></li>

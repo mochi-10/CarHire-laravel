@@ -88,7 +88,6 @@ class CarController extends Controller
 
         $updateCar = $car->update([
             'make' => $request->make,
-            'model' => $request->model,
             'registration_number' => $request->registration_number,
             'year' => $request->year,
             'color' => $request->color,

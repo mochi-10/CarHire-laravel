@@ -81,20 +81,22 @@
              
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
-                  <a href="{{ route('profile.index') }}" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                
-                    <a  class="btn btn-default btn-flat" href="{{ route('logout') }}"
-                          onclick="event.preventDefault();
-                          document.getElementById('logout-form').submit();">
-                          Sign Out
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                        </form>
+                <div class="row" style="margin: 0;">
+                  <div class="col-xs-4 text-left">
+                    <a href="{{ route('profile.index') }}" class="btn btn-default btn-flat" style="width: 100%;">Profile</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="{{ route('welcome') }}" class="btn btn-default btn-flat" style="width: 100%;">Home</a>
+                  </div>
+                  <div class="col-xs-4 text-right">
+                    <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
+                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width: 120%;">
+                      Sign Out
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                      @csrf
+                    </form>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -144,6 +146,12 @@
         <li>
           <a href="{{ route('adminDashboard') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          </a>
+        </li>
+
+         <li>
+          <a href="{{ route('admin')}}">
+            <i class="fa fa-dashboard"></i> <span>Admin</span>
           </a>
         </li>
 

@@ -22,53 +22,6 @@ class MpesaService
         $this->environment = config('services.mpesa.environment', 'sandbox');
     }
 
-    public function initiateSTKPush($phoneNumber, $amount, $reference)
-    {
-        try {
-            $accessToken = $this->getAccessToken();
-            
-            $timestamp = date('YmdHis');
-            $password = base64_encode($this->shortcode . $this->passkey . $timestamp);
-            
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type' => 'application/json',
-            ])->post($this->getBaseUrl() . '/mpesa/stkpush/v1/processrequest', [
-                'BusinessShortCode' => $this->shortcode,
-                'Password' => $password,
-                'Timestamp' => $timestamp,
-                'TransactionType' => 'CustomerPayBillOnline',
-                'Amount' => $amount,
-                'PartyA' => $this->formatPhoneNumber($phoneNumber),
-                'PartyB' => $this->shortcode,
-                'PhoneNumber' => $this->formatPhoneNumber($phoneNumber),
-                'CallBackURL' => route('mpesa.callback'),
-                'AccountReference' => $reference,
-                'TransactionDesc' => 'Car Hire Payment - ' . $reference,
-            ]);
-
-            Log::info('M-Pesa STK Push Response', [
-                'phone' => $phoneNumber,
-                'amount' => $amount,
-                'reference' => $reference,
-                'response' => $response->json()
-            ]);
-
-            return $response->json();
-        } catch (\Exception $e) {
-            Log::error('M-Pesa STK Push Error', [
-                'error' => $e->getMessage(),
-                'phone' => $phoneNumber,
-                'amount' => $amount
-            ]);
-            
-            return [
-                'success' => false,
-                'message' => 'Failed to initiate payment: ' . $e->getMessage()
-            ];
-        }
-    }
-
     protected function getAccessToken()
     {
         $credentials = base64_encode($this->consumerKey . ':' . $this->consumerSecret);
@@ -110,6 +63,149 @@ class MpesaService
         }
         
         return $phone;
+    }
+
+    protected function isValidSandboxPhone($phone)
+    {
+        $sandboxPhones = [
+            '254708374149',
+            '254708374150',
+            '254708374151',
+            '254708374152',
+            '254708374153',
+            '254708374154',
+            '254708374155',
+            '254708374156',
+            '254708374157',
+            '254708374158',
+            '254708374159'
+        ];
+        
+        $formattedPhone = $this->formatPhoneNumber($phone);
+        return in_array($formattedPhone, $sandboxPhones);
+    }
+
+    public function initiateSTKPush($phoneNumber, $amount, $reference)
+    {
+        try {
+            // Validate sandbox phone number if in sandbox mode
+            if ($this->environment === 'sandbox' && !$this->isValidSandboxPhone($phoneNumber)) {
+                Log::error('M-Pesa Sandbox Phone Validation Failed', [
+                    'phone' => $phoneNumber,
+                    'formatted_phone' => $this->formatPhoneNumber($phoneNumber),
+                    'amount' => $amount
+                ]);
+                
+                return [
+                    'success' => false,
+                    'errorMessage' => 'Invalid sandbox phone number',
+                    'message' => 'M-Pesa sandbox only works with specific test phone numbers. Please use a valid sandbox phone number.'
+                ];
+            }
+            
+            // Validate amount for sandbox
+            if ($this->environment === 'sandbox' && ($amount < 1 || $amount > 1000)) {
+                Log::error('M-Pesa Sandbox Amount Validation Failed', [
+                    'phone' => $phoneNumber,
+                    'amount' => $amount
+                ]);
+                
+                return [
+                    'success' => false,
+                    'errorMessage' => 'Invalid amount for sandbox',
+                    'message' => 'M-Pesa sandbox only accepts amounts between 1-1000 KSH. Please use a valid amount.'
+                ];
+            }
+            
+            $accessToken = $this->getAccessToken();
+            
+            if (!$accessToken) {
+                Log::error('M-Pesa Access Token Error', [
+                    'phone' => $phoneNumber,
+                    'amount' => $amount,
+                    'reference' => $reference
+                ]);
+                
+                return [
+                    'success' => false,
+                    'message' => 'Failed to obtain access token from M-Pesa API'
+                ];
+            }
+            
+            $timestamp = date('YmdHis');
+            $password = base64_encode($this->shortcode . $this->passkey . $timestamp);
+            
+            $requestData = [
+                'BusinessShortCode' => $this->shortcode,
+                'Password' => $password,
+                'Timestamp' => $timestamp,
+                'TransactionType' => 'CustomerPayBillOnline',
+                'Amount' => $amount,
+                'PartyA' => $this->formatPhoneNumber($phoneNumber),
+                'PartyB' => $this->shortcode,
+                'PhoneNumber' => $this->formatPhoneNumber($phoneNumber),
+                'CallBackURL' => route('mpesa.callback'),
+                'AccountReference' => $reference,
+                'TransactionDesc' => 'Car Hire Payment - ' . $reference,
+            ];
+            
+            Log::info('M-Pesa STK Push Request', [
+                'phone' => $phoneNumber,
+                'formatted_phone' => $this->formatPhoneNumber($phoneNumber),
+                'amount' => $amount,
+                'reference' => $reference,
+                'request_data' => $requestData,
+                'environment' => $this->environment
+            ]);
+            
+            $response = Http::timeout(30)->withHeaders([
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Content-Type' => 'application/json',
+            ])->post($this->getBaseUrl() . '/mpesa/stkpush/v1/processrequest', $requestData);
+
+            $responseData = $response->json();
+            
+            Log::info('M-Pesa STK Push Response', [
+                'phone' => $phoneNumber,
+                'amount' => $amount,
+                'reference' => $reference,
+                'response' => $responseData,
+                'status_code' => $response->status(),
+                'environment' => $this->environment
+            ]);
+
+            if ($response->successful() && isset($responseData['CheckoutRequestID'])) {
+                return $responseData;
+            } else {
+                $errorMessage = $responseData['errorMessage'] ?? $responseData['errorCode'] ?? 'Unknown error';
+                Log::error('M-Pesa STK Push Failed', [
+                    'phone' => $phoneNumber,
+                    'amount' => $amount,
+                    'error' => $errorMessage,
+                    'response' => $responseData,
+                    'environment' => $this->environment
+                ]);
+                
+                return [
+                    'success' => false,
+                    'errorMessage' => $errorMessage,
+                    'message' => 'M-Pesa payment initiation failed: ' . $errorMessage
+                ];
+            }
+        } catch (\Exception $e) {
+            Log::error('M-Pesa STK Push Exception', [
+                'error' => $e->getMessage(),
+                'phone' => $phoneNumber,
+                'amount' => $amount,
+                'trace' => $e->getTraceAsString(),
+                'environment' => $this->environment
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Failed to initiate payment: ' . $e->getMessage()
+            ];
+        }
     }
 
     public function handleCallback($callbackData)
