@@ -43,7 +43,7 @@ Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
 Route::post('/addCar', [CarController::class, 'adminAddCar'])->name('adminAddCar');
 Route::post('/updateCar', [CarController::class, 'adminUpdateCar'])->name('adminUpdateCar');
 Route::post('/deleteCar', [CarController::class, 'adminDeleteCar'])->name('adminDeleteCar');
-Route::resource('car-models', CarModelController::class);
+Route::resource('car-models', [CarModelController::class, 'index'])->name('car_models.index');
 Route::post('/searchCar', [CarController::class, 'searchCar'])->name('searchCar.index');
 Route::get('/myProfile', [MyProfileController::class, 'profile'])->name('profile.index');
 Route::post('/myProfile/update', [MyProfileController::class, 'updateProfile'])->name('profile.update');

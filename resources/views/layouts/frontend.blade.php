@@ -132,7 +132,11 @@
             </ul>
           </div>
         </div>
-      </div>
+        <div class="pull-right hidden-xs">
+          <b>Car Hire System</b>
+        </div> 
+        <strong>Copyright &copy; 2025 <a href="#">mochibrian10@gmail.com </a>| Full-Stack Software Developer.</strong> 
+          </div>
     </footer>
   </div>
   <script src="{{ asset('frontend/js/jquery-3.3.1.min.js') }}"></script>
